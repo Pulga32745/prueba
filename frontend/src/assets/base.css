@@ -1,0 +1,27 @@
+:root {
+  --color-bg: #f6f8f7;
+  --color-accent: #4caf50;
+  --color-accent-dark: #388e3c;
+  --color-text: #1e1e1e;
+  --color-muted: #6c757d;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Poppins', sans-serif;
+  padding-top: 80px;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 600;
+}
+
+.btn-success {
+  background-color: var(--color-accent);
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: var(--color-accent-dark);
+}
