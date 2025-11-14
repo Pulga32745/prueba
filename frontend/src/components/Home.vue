@@ -105,7 +105,7 @@ const productos = [
     precioOriginal: 29.99,
     precioFinal: 23.99,
     descuento: 20,
-    img: '/assets/remera.jpg',
+    img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg',
   },
   {
     id: 2,
@@ -114,7 +114,7 @@ const productos = [
     precioOriginal: 49.99,
     precioFinal: 49.99,
     descuento: 0,
-    img: '/assets/jean.jpg',
+    img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg',
   },
   {
     id: 3,
@@ -123,7 +123,7 @@ const productos = [
     precioOriginal: 129.99,
     precioFinal: 110.49,
     descuento: 15,
-    img: '/assets/campera.jpg',
+    img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg',
   },
   {
     id: 4,
@@ -132,7 +132,7 @@ const productos = [
     precioOriginal: 79.99,
     precioFinal: 55.99,
     descuento: 30,
-    img: '/assets/nike.jpg',
+    img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg',
   },
 ]
 

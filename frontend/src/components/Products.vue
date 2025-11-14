@@ -16,9 +16,9 @@
 import ProductCard from './ProductCard.vue'
 // INTEGRAR BACKEND
 const productos = [
-  { id: 1, nombre: 'Remera Verde', precio: 9500, img: '/assets/remera-verde.jpg' },
-  { id: 2, nombre: 'Jean Natural', precio: 12000, img: '/assets/jean.jpg' },
-  { id: 3, nombre: 'Campera Eco', precio: 17500, img: '/assets/campera.jpg' }
+  { id: 1, nombre: 'Remera Verde', precio: 9500, img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg' },
+  { id: 2, nombre: 'Jean Natural', precio: 12000, img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg' },
+  { id: 3, nombre: 'Campera Eco', precio: 17500, img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg' }
 ]
 
 function agregarAlCarrito(producto) {

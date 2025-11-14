@@ -20,8 +20,8 @@
 
 <script setup>
 const ofertas = [
-  { id: 1, nombre: 'Campera Eco', precio: 9500, precioOriginal: 13500, img: '/assets/campera.jpg' },
-  { id: 2, nombre: 'Remera Verde', precio: 5500, precioOriginal: 7500, img: '/assets/remera-verde.jpg' },
-  { id: 3, nombre: 'Zapatillas Urbanas', precio: 11000, precioOriginal: 15000, img: '/assets/nike.jpg' },
+  { id: 1, nombre: 'Campera Eco', precio: 9500, precioOriginal: 13500, img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg' },
+  { id: 2, nombre: 'Remera Verde', precio: 5500, precioOriginal: 7500, img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg' },
+  { id: 3, nombre: 'Zapatillas Urbanas', precio: 11000, precioOriginal: 15000, img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg' },
 ]
 </script>
