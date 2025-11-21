@@ -1,0 +1,13 @@
+.card-header {
+  background-color: #00b4d8;
+  color: black;
+}
+
+label {
+  text-transform: capitalize;
+  margin-top: 10px;
+}
+
+table {
+  font-size: 0.9rem;
+}

@@ -1,0 +1,81 @@
+  <section class="card">
+    <div class="card-header">
+      <h3>Dashboard de Stock</h3>
+    </div>
+
+    <div class="card-body">
+
+      <!-- FORMULARIO -->
+      <form novalidate @submit.prevent="guardarProducto">
+        <div class="form-group">
+          <label for="nombre">Nombre del producto</label>
+          <input 
+            id="nombre" 
+            type="text" 
+            class="form-control" 
+            v-model.trim="formData.nombre"
+            @input="formDirty.nombre = true"
+          >
+          <div v-if="errorNombre.mostrar" class="alert alert-danger my-1">
+            {{ errorNombre.mensaje }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="precio">Precio</label>
+          <input 
+            id="precio" 
+            type="number" 
+            class="form-control"
+            v-model.number="formData.precio"
+            @input="formDirty.precio = true"
+          >
+          <div v-if="errorPrecio.mostrar" class="alert alert-danger my-1">
+            {{ errorPrecio.mensaje }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="stock">Stock</label>
+          <input 
+            id="stock" 
+            type="number" 
+            class="form-control"
+            v-model.number="formData.stock"
+            @input="formDirty.stock = true"
+          >
+          <div v-if="errorStock.mostrar" class="alert alert-danger my-1">
+            {{ errorStock.mensaje }}
+          </div>
+        </div>
+
+        <button class="btn btn-success my-3" :disabled="botonDeshabilitado">
+          Guardar Producto
+        </button>
+      </form>
+
+      <hr>
+
+      <!-- TABLA DE PRODUCTOS -->
+      <h5 class="mt-4">Listado de Productos</h5>
+
+      <table class="table table-dark table-striped mt-3">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Stock</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr v-for="(prod, i) in productos" :key="i">
+            <td>{{ prod.nombre }}</td>
+            <td>${{ prod.precio }}</td>
+            <td>{{ prod.stock }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </section>
