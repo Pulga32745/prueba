@@ -5,79 +5,103 @@ export default {
     return {
       productos: [],
 
+      modoEdicion: false,
+
       formData: this.getInicialData(),
-      formDirty: this.getInicialData()
+      formDirty: this.getInicialData(),
     };
   },
 
   computed: {
-    // VALIDACIÓN NOMBRE
     errorNombre() {
-      let mensaje = "";
-      const n = this.formData.nombre;
+      let m = "";
+      const v = this.formData.nombre;
 
-      if (!n) mensaje = "Campo requerido";
-      else if (n.length < 3) mensaje = "Debe tener al menos 3 caracteres";
+      if (!v) m = "Campo requerido";
+      else if (v.length < 3) m = "Debe tener al menos 3 caracteres";
 
-      return {
-        mensaje,
-        mostrar: mensaje !== "" && this.formDirty.nombre,
-        ok: mensaje === ""
-      };
+      return { mensaje: m, mostrar: m && this.formDirty.nombre, ok: !m };
     },
 
-    // VALIDACIÓN PRECIO
+    errorDescripcion() {
+      let m = "";
+      const v = this.formData.descripcion;
+
+      if (!v) m = "Campo requerido";
+      else if (v.length < 10) m = "Debe tener mínimo 10 caracteres";
+      else if (v.length > 200) m = "Máximo 200 caracteres";
+
+      return { mensaje: m, mostrar: m && this.formDirty.descripcion, ok: !m };
+    },
+
     errorPrecio() {
-      let mensaje = "";
-      const p = this.formData.precio;
+      let m = "";
+      const v = this.formData.precio;
 
-      if (!p && p !== 0) mensaje = "Campo requerido";
-      else if (p <= 0) mensaje = "Debe ser un número mayor a 0";
+      if (!v) m = "Campo requerido";
+      else if (v <= 0) m = "Debe ser mayor a 0";
 
-      return {
-        mensaje,
-        mostrar: mensaje !== "" && this.formDirty.precio,
-        ok: mensaje === ""
-      };
+      return { mensaje: m, mostrar: m && this.formDirty.precio, ok: !m };
     },
 
-    // VALIDACIÓN STOCK
-    errorStock() {
-      let mensaje = "";
-      const s = this.formData.stock;
+/*     errorStock() {
+      let m = "";
+      const v = this.formData.stock;
 
-      if (!s && s !== 0) mensaje = "Campo requerido";
-      else if (s < 0) mensaje = "El stock no puede ser negativo";
+      if (!v && v !== 0) m = "Campo requerido";
+      else if (v < 0) m = "No puede ser negativo";
 
-      return {
-        mensaje,
-        mostrar: mensaje !== "" && this.formDirty.stock,
-        ok: mensaje === ""
-      };
-    },
+      return { mensaje: m, mostrar: m && this.formDirty.stock, ok: !m };
+    }, */
 
     botonDeshabilitado() {
-      return !this.errorNombre.ok || !this.errorPrecio.ok || !this.errorStock.ok;
-    }
+      return (
+        !this.errorNombre.ok ||
+        !this.errorDescripcion.ok ||
+        !this.errorPrecio.ok
+        /* !this.errorStock.ok */
+      );
+    },
   },
 
   methods: {
-    // Estado inicial del form
     getInicialData() {
       return {
         nombre: null,
+        descripcion: null,
         precio: null,
-        stock: null
+        /* stock: null, */
+        id: null
       };
     },
 
-    // Guarda un producto en la tabla
     guardarProducto() {
-      const nuevo = { ...this.formData };
-      this.productos.push(nuevo);
+      // EDITAR
+      if (this.modoEdicion) {
+        const index = this.productos.findIndex(
+          (p) => p.id === this.formData.id
+        );
+        this.productos.splice(index, 1, { ...this.formData });
+
+        this.modoEdicion = false;
+      } else {
+        // NUEVO PRODUCTO
+        const nuevo = { ...this.formData, id: Date.now() };
+        this.productos.push(nuevo);
+      }
 
       this.formData = this.getInicialData();
       this.formDirty = this.getInicialData();
-    }
-  }
+    },
+
+    editarProducto(producto) {
+      this.formData = { ...producto };
+      this.modoEdicion = true;
+    },
+
+    eliminarProducto(id) {
+      if (!confirm("¿Seguro que querés eliminar este producto?")) return;
+      this.productos = this.productos.filter((p) => p.id !== id);
+    },
+  },
 };

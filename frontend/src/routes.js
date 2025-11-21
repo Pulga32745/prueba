@@ -7,6 +7,7 @@ import Offers from "./components/Offers.vue"
 import Login from "./components/Login.vue"
 import Carrito from "./components/Carrito.vue"
 import Register from "./components/Register.vue"
+import Dash from "./components/Dash/index.vue"
 
 
 const routes = [
@@ -20,6 +21,8 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/carrito', component: Carrito },
   { path: '/register', component: Register },
+  { path: '/dash', component: Dash },
+  
 
     { path: '/:pathmatch(.*)*', redirect: '/home' },
 ]
