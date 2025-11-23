@@ -12,10 +12,10 @@ export const authenticateToken = async (req, res, next) => {
     const { isValid, payload } = await validateToken(token);
 
     if (!isValid) {
-      return res.status(403).json({ error: "Invalid or expired token" });
+      return res.status(401).json({ error: "Invalid or expired token" });
     }
 
-    req.user = payload; // Guarda el usuario en la request
+    req.user = payload;
     next();
 
   } catch (err) {

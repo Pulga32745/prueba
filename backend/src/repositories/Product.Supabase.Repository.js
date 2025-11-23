@@ -1,71 +1,78 @@
-import DatabaseFactory from '../databases/DatabaseFactory.js';
-import ProductDto from '../dto/ProductDTO.js';
+import SupabaseConnection from "../databases/supabase.cnx.js";
+import ProductModelSupabase from "../models/Product.Supabase.js";
 
 export default class ProductRepositorySupabase {
   constructor() {
-    this.init();
+    this.supabase = SupabaseConnection.getConnection();
+    this.table = "products";
   }
 
-  async init() {
-    this.supabase = await DatabaseFactory.getConnection();
-  }
-
-  // Obtener todos los productos
+  // Obtener todos
   async getAll() {
-    const { data, error } = await this.supabase.from('productos').select('*');
+    const { data, error } = await this.supabase
+      .from(this.table)
+      .select("*");
 
-    if (error) throw new Error(error.message);
-
-    return data.map((producto) => ProductDto.fromDataBase(producto));
+    if (error) throw error;
+    return data;
   }
 
-  // Obtener un producto por ID
-  getOne = async (id) => {
-    const { data, error } = await this.supabase.from('productos').select('*').eq('id', id).single();
+  // Crear
+  async create(producto) {
+    const nuevo = new ProductModelSupabase(
+      crypto.randomUUID(),
+      producto.nombre,
+      producto.precio,
+      producto.descripcion,
+      producto.stock
+    );
 
-    if (error) throw new Error(error.message);
-
-    return ProductDto.fromDataBase(data);
-  };
-
-  // Crear un nuevo producto
-  createOne = async ({ nombre, precio, descripcion }) => {
     const { data, error } = await this.supabase
-      .from('productos')
-      .insert([{ nombre, precio, descripcion }])
-      .select()
-      .single();
+      .from(this.table)
+      .insert([nuevo])
+      .select();
 
-    if (error) throw new Error(error.message);
+    if (error) throw error;
+    return data[0];
+  }
 
-    return ProductDto.fromDataBase(data);
-  };
-
-  // Actualizar un producto por ID
-  updateOne = async (id, { nombre, precio, descripcion }) => {
+  // Actualizar
+  async update(producto) {
     const { data, error } = await this.supabase
-      .from('productos')
-      .update({ nombre, precio, descripcion })
-      .eq('id', id)
-      .select()
-      .single();
+      .from(this.table)
+      .update({
+        nombre: producto.nombre,
+        precio: producto.precio,
+        descripcion: producto.descripcion,
+        stock: producto.stock
+      })
+      .eq("id", producto.id)
+      .select();
 
-    if (error) throw new Error(error.message);
+    if (error) throw error;
+    return data[0];
+  }
 
-    return ProductDto.fromDataBase(data);
-  };
-
-  // Eliminar un producto por ID
-  deleteOne = async (id) => {
+  // Borrar
+  async delete(id) {
     const { data, error } = await this.supabase
-      .from('productos')
+      .from(this.table)
       .delete()
-      .eq('id', id)
-      .select()
+      .eq("id", id);
+
+    if (error) throw error;
+    return data;
+  }
+
+  // Buscar por ID
+  async getById(id) {
+    const { data, error } = await this.supabase
+      .from(this.table)
+      .select("*")
+      .eq("id", id)
       .single();
 
-    if (error) throw new Error(error.message);
-
-    return ProductDto.fromDataBase(data);
-  };
+    if (error) throw error;
+    return data;
+  }
 }

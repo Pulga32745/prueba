@@ -1,107 +1,54 @@
-import { RepositoryFactory } from '../repositories/RepositoryFactory.js';
+import { RepositoryFactory } from "../repositories/RepositoryFactory.js";
 
-const ProductRepository = RepositoryFactory.getRepository();
+export class ProductController {
 
-export const ProductController = {
-  // Obtener todos los productos
-  getAllProducts: async (request, response) => {
+  static async getAllProducts(req, res) {
     try {
-      const products = await ProductRepository.getAll();
-
-      response.status(200).json({
-        message: 'OK',
-        payload: products,
-      });
-    } catch (error) {
-      console.error('Error al obtener los productos:', error.message);
-      response.status(500).json({ error: 'Error interno del servidor' });
+      const repo = RepositoryFactory.getRepository();
+      const productos = await repo.getAll();
+      res.json(productos);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
     }
-  },
+  }
 
-  // Obtener producto por ID
-  getById: async (request, response) => {
+  static async createByJson(req, res) {
     try {
-      const { id } = request.params;
-      const product = await ProductRepository.getOne(id);
-
-      if (!product) {
-        return response.status(404).json({ error: 'Producto no encontrado' });
-      }
-
-      response.status(200).json({
-        message: 'OK',
-        payload: product,
-      });
-    } catch (error) {
-      console.error('Error al obtener producto por ID:', error.message);
-      response.status(500).json({ error: 'Error interno del servidor' });
+      const repo = RepositoryFactory.getRepository();
+      const producto = await repo.create(req.body);
+      res.json(producto);
+    } catch (e) {
+      res.status(400).json({ error: e.message });
     }
-  },
+  }
 
-  // Crear producto desde JSON (body)
-  createByJson: async (request, response) => {
+  static async updateByJson(req, res) {
     try {
-      const { nombre, precio, descripcion } = request.body;
-
-      if (!nombre || !precio) {
-        return response.status(400).json({ error: 'Faltan campos requeridos' });
-      }
-
-      const newProduct = await ProductRepository.createOne({
-        nombre,
-        precio,
-        descripcion,
-      });
-
-      response.status(201).json({
-        message: 'Producto creado correctamente',
-        payload: newProduct,
-      });
-    } catch (error) {
-      console.error('Error al crear producto:', error.message);
-      response.status(500).json({ error: 'Error interno del servidor' });
+      const repo = RepositoryFactory.getRepository();
+      const producto = await repo.update(req.body);
+      res.json(producto);
+    } catch (e) {
+      res.status(400).json({ error: e.message });
     }
-  },
+  }
 
-  // Actualizar producto desde JSON (body)
-  updateByJson: async (request, response) => {
+  static async deleteById(req, res) {
     try {
-      const { id, nombre, precio, descripcion } = request.body;
-
-      if (!id) {
-        return response.status(400).json({ error: 'El ID del producto es obligatorio' });
-      }
-
-      const updated = await ProductRepository.updateOne(id, {
-        nombre,
-        precio,
-        descripcion,
-      });
-
-      response.status(200).json({
-        message: 'Producto actualizado correctamente',
-        payload: updated,
-      });
-    } catch (error) {
-      console.error('Error al actualizar producto:', error.message);
-      response.status(500).json({ error: 'Error interno del servidor' });
+      const repo = RepositoryFactory.getRepository();
+      await repo.delete(req.params.id);
+      res.json({ message: "Producto eliminado" });
+    } catch (e) {
+      res.status(400).json({ error: e.message });
     }
-  },
+  }
 
-  // Eliminar producto por ID
-  deleteById: async (request, response) => {
+  static async getById(req, res) {
     try {
-      const { id } = request.params;
-
-      const deleted = await ProductRepository.deleteOne(id);
-
-      response.status(200).json({
-        message: 'Producto eliminado correctamente',
-        payload: deleted,
-      });
-    } catch (error) {
-      console.error('Error al eliminar producto:', error.message);
-      response.status(500).json({ error: 'Error interno del servidor' });
+      const repo = RepositoryFactory.getRepository();
+      const producto = await repo.getById(req.params.id);
+      res.json(producto);
+    } catch (e) {
+      res.status(404).json({ error: e.message });
     }
-  },
-};
+  }
+}
