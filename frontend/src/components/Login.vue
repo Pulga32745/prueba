@@ -21,9 +21,47 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 const email = ref('')
 const password = ref('')
-function login() {
-  alert(`Bienvenido, ${email.value}!`)
+
+async function login() {
+  try {
+    const response = await fetch("http://localhost:3000/api/v1/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.error || "Error al iniciar sesión");
+      return;
+    }
+
+    // Guardar tokens y rol
+    localStorage.setItem("token", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
+    localStorage.setItem("role", data.user.role);
+
+    // Redirección automática según rol
+    if (data.user.role === "admin") {
+      router.push("/dash");
+    } else {
+      router.push("/home");
+    }
+
+  } catch (error) {
+    console.error(error);
+    alert("Error de conexión");
+  }
 }
 </script>
+

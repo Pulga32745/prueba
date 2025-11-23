@@ -9,27 +9,37 @@ import Carrito from "./components/Carrito.vue"
 import Register from "./components/Register.vue"
 import Dash from "./components/Dash/index.vue"
 
+// 🔒 Middleware para proteger el Dashboard
+const requireAdmin = (to, from, next) => {
+  const token = localStorage.getItem("token")
+  const role = localStorage.getItem("role")
+
+  if (!token) return next("/login")       // No logueado
+  if (role !== "admin") return next("/")  // Logueado pero NO admin
+
+  next() // Admin → entra
+}
 
 const routes = [
-    { path: '/', redirect: '/home' },
+  { path: "/", redirect: "/home" },
 
-  { path: '/', redirect: '/home' },
-  { path: '/home', component: Home },
-  { path: '/products', component: Products },
-  { path: '/offers', component: Offers },
-  { path: '/contact', component: Contact },
-  { path: '/login', component: Login },
-  { path: '/carrito', component: Carrito },
-  { path: '/register', component: Register },
-  { path: '/dash', component: Dash },
-  
+  { path: "/home", component: Home },
+  { path: "/products", component: Products },
+  { path: "/offers", component: Offers },
+  { path: "/contact", component: Contact },
+  { path: "/login", component: Login },
+  { path: "/carrito", component: Carrito },
+  { path: "/register", component: Register },
 
-    { path: '/:pathmatch(.*)*', redirect: '/home' },
+  // 🛡️ RUTA PROTEGIDA
+  { path: "/dash", component: Dash, beforeEnter: requireAdmin },
+
+  { path: "/:pathmatch(.*)*", redirect: "/home" },
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes: routes
+  history: createWebHistory(),
+  routes
 })
 
 export default router

@@ -1,15 +1,20 @@
+import ProductosService from "@/services/productosService";
+
 export default {
   name: "Dashboard",
 
   data() {
     return {
       productos: [],
-
       modoEdicion: false,
 
       formData: this.getInicialData(),
       formDirty: this.getInicialData(),
     };
+  },
+
+  async mounted() {
+    this.productos = await ProductosService.getAll();
   },
 
   computed: {
@@ -44,22 +49,11 @@ export default {
       return { mensaje: m, mostrar: m && this.formDirty.precio, ok: !m };
     },
 
-/*     errorStock() {
-      let m = "";
-      const v = this.formData.stock;
-
-      if (!v && v !== 0) m = "Campo requerido";
-      else if (v < 0) m = "No puede ser negativo";
-
-      return { mensaje: m, mostrar: m && this.formDirty.stock, ok: !m };
-    }, */
-
     botonDeshabilitado() {
       return (
         !this.errorNombre.ok ||
         !this.errorDescripcion.ok ||
         !this.errorPrecio.ok
-        /* !this.errorStock.ok */
       );
     },
   },
@@ -70,28 +64,23 @@ export default {
         nombre: null,
         descripcion: null,
         precio: null,
-        /* stock: null, */
+        stock: null,
         id: null
       };
     },
 
-    guardarProducto() {
-      // EDITAR
+    async guardarProducto() {
       if (this.modoEdicion) {
-        const index = this.productos.findIndex(
-          (p) => p.id === this.formData.id
-        );
-        this.productos.splice(index, 1, { ...this.formData });
-
-        this.modoEdicion = false;
+        await ProductosService.update(this.formData.id, this.formData);
       } else {
-        // NUEVO PRODUCTO
-        const nuevo = { ...this.formData, id: Date.now() };
-        this.productos.push(nuevo);
+        await ProductosService.create(this.formData);
       }
+
+      this.productos = await ProductosService.getAll();
 
       this.formData = this.getInicialData();
       this.formDirty = this.getInicialData();
+      this.modoEdicion = false;
     },
 
     editarProducto(producto) {
@@ -99,9 +88,11 @@ export default {
       this.modoEdicion = true;
     },
 
-    eliminarProducto(id) {
+    async eliminarProducto(id) {
       if (!confirm("¿Seguro que querés eliminar este producto?")) return;
-      this.productos = this.productos.filter((p) => p.id !== id);
+
+      await ProductosService.delete(id);
+      this.productos = await ProductosService.getAll();
     },
   },
 };
