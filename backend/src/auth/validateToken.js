@@ -1,21 +1,11 @@
-//import DatabaseFactory from "../databases/DatabaseFactory.js";
-import SupaBaseConnection from '../databases/supabase.cnx.js';
+import jwt from "jsonwebtoken";
+import { config } from "../config/config.js";
 
-const supabase = SupaBaseConnection.connect();
-
-export const validateToken = async (token) => {
-  try {
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser(token);
-
-    if (error || !user) {
-      return { isValid: false };
-    }
-
-    return { isValid: true };
-  } catch (error) {
-    return { isValid: false };
-  }
-};
+export default function validateToken(token) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, config.JWT_SECRET, (err, decoded) => {
+      if (err) return reject(err);
+      resolve(decoded); 
+    });
+  });
+}

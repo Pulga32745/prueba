@@ -1,23 +1,25 @@
-import { getToken } from '../auth/getToken.js';
-import { validateToken } from '../auth/validateToken.js';
+import { getToken } from "../auth/getToken.js";
+import validateToken from "../auth/validateToken.js";
 
-export const authenticateToken = async (request, response, next) => {
+export const authenticateToken = async (req, res, next) => {
   try {
-    const token = getToken(request);
+    const token = getToken(req);
 
     if (!token) {
-      return response.status(401).json({ message: 'Token missing' });
+      return res.status(401).json({ error: "Token missing" });
     }
 
-    const { isValid } = await validateToken(token);
+    const { isValid, payload } = await validateToken(token);
 
     if (!isValid) {
-      return response.status(403).json({ message: 'Invalid or expired token' });
+      return res.status(403).json({ error: "Invalid or expired token" });
     }
 
+    req.user = payload; // Guarda el usuario en la request
     next();
+
   } catch (err) {
-    console.error('Auth-Middleware error:', err);
-    return response.status(500).json({ message: 'Internal server error' });
+    console.error("Auth-Middleware error:", err);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };

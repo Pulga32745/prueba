@@ -9,6 +9,7 @@ import UserRouter from './router/user.crud.router.js';
 import notFoundHandler from './middleware/notFoundHandler.js';
 import { apiReference } from '@scalar/express-api-reference';
 import path from 'path';
+import AuthRouter from './router/auth.router.js';
  
 
 const server = express();
@@ -18,23 +19,15 @@ server.use(morgan('dev'));
 server.use(express.json());
 
 
-const allowedOrigins = [process.env.FRONTEND_ORIGIN || 'http://localhost:5173'];
 server.use(cors({
-  origin: (origin, callback) => {
-    // permitir requests sin origin o del frontend
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET','POST','PATCH','PUT','DELETE','OPTIONS'],
-  credentials: true,
+  origin: "http://localhost:5173",
+  methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+  allowedHeaders: "Content-Type, Authorization",
+  credentials: true
 }));
 
 
- 
-// src/server.js (reemplazá la línea actual)
+
 server.use('/openapi.yml', express.static(path.join(process.cwd(), 'docs', 'openapi.yml')));
 server.use('/docs',
   apiReference({
@@ -46,10 +39,12 @@ server.use('/docs',
 
 
 // Rutas
-server.use('/api/v1/products', ProductAllRouter); // lista de productos
+server.use('/api/v1/products', ProductAllRouter);
 server.use('/api/v1/product', ProductRouter);
 server.use('/api/v1/users', UserAllRouter);
 server.use('/api/v1/user', UserRouter);
+server.use('/api/v1/auth', AuthRouter); 
+
 
 // Manejo 404
 server.use(notFoundHandler);

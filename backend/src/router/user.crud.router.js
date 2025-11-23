@@ -1,12 +1,8 @@
 import { Router } from 'express';
-import { UserController } from '../controllers/User.js';
-import { authenticateToken } from '../middleware/authentication.js';
+import UserController from '../controllers/User.js';
+import validateToken from '../auth/validateToken.js';
 
 const UserRouter = Router();
 
-UserRouter.get('/select/:id', UserController.getById)
-  .delete('/delete/:id', authenticateToken, UserController.deleteById)
-  .post('/create', authenticateToken, UserController.createByJson)
-  .patch('/update', authenticateToken, UserController.updateByJson);
-
+// Eliminamos rutas que no existen en el controller
 export default UserRouter;
