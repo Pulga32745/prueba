@@ -7,8 +7,13 @@
 
         <!-- NOMBRE -->
         <div class="mb-3 text-start">
-          <input   v-model.trim="formData.nombre"   @input="formDirty.nombre = true" type="text"  class="form-control"  placeholder="Nombre completo"
-          >
+          <input
+            v-model.trim="formData.nombre"
+            @input="formDirty.nombre = true"
+            type="text"
+            class="form-control"
+            placeholder="Nombre completo"
+          />
           <div v-if="errorNombre.mostrar" class="alert alert-danger my-1 p-2">
             {{ errorNombre.mensaje }}
           </div>
@@ -16,7 +21,13 @@
 
         <!-- EMAIL -->
         <div class="mb-3 text-start">
-          <input  v-model.trim="formData.email"  @input="formDirty.email = true" type="email"  class="form-control"  placeholder="Email" >
+          <input
+            v-model.trim="formData.email"
+            @input="formDirty.email = true"
+            type="email"
+            class="form-control"
+            placeholder="Email"
+          />
           <div v-if="errorEmail.mostrar" class="alert alert-danger my-1 p-2">
             {{ errorEmail.mensaje }}
           </div>
@@ -24,7 +35,13 @@
 
         <!-- PASSWORD -->
         <div class="mb-3 text-start">
-          <input  v-model.trim="formData.password" @input="formDirty.password = true"type="password" class="form-control" placeholder="Contraseña">
+          <input
+            v-model.trim="formData.password"
+            @input="formDirty.password = true"
+            type="password"
+            class="form-control"
+            placeholder="Contraseña"
+          />
           <div v-if="errorPassword.mostrar" class="alert alert-danger my-1 p-2">
             {{ errorPassword.mensaje }}
           </div>
@@ -32,102 +49,96 @@
 
         <!-- CONFIRMAR -->
         <div class="mb-3 text-start">
-          <input  v-model.trim="formData.confirmar" @input="formDirty.confirmar = true" type="password"  class="form-control"  placeholder="Confirmar contraseña">
-          <div v-if="errorConfirmar.mostrar" class="alert alert-danger my-1 p-2"> {{ errorConfirmar.mensaje }}</div>
+          <input
+            v-model.trim="formData.confirmar"
+            @input="formDirty.confirmar = true"
+            type="password"
+            class="form-control"
+            placeholder="Confirmar contraseña"
+          />
+          <div v-if="errorConfirmar.mostrar" class="alert alert-danger my-1 p-2">
+            {{ errorConfirmar.mensaje }}
+          </div>
         </div>
 
-        <button :disabled="estadoBotonDeshabilitado()"> Registrarme
+        <button :disabled="estadoBotonDeshabilitado()" class="btn btn-success w-100">
+          Registrarme
         </button>
-
       </form>
 
-      <div v-if="mensaje" class="mt-3 fw-semibold":class="{'text-success': exito, 'text-danger': !exito}">
+      <div
+        v-if="mensaje"
+        class="mt-3 fw-semibold"
+        :class="{ 'text-success': exito, 'text-danger': !exito }"
+      >
         {{ mensaje }}
       </div>
     </div>
   </section>
 </template>
 
-
-
-
 <script>
+import AuthService from "@/services/authService";
 
 export default {
-  name: 'Register',
+  name: "Register",
 
   data() {
     return {
       formData: this.getInicialData(),
       formDirty: this.getInicialData(),
-      mensaje: '',
-      exito: false
-    }
+      mensaje: "",
+      exito: false,
+    };
   },
 
   computed: {
     // ------- NOMBRE -------
     errorNombre() {
-      let mensaje = ''
-      let nombre = this.formData.nombre
+      let mensaje = "";
+      const v = this.formData.nombre;
 
-      if (!nombre) mensaje = 'Campo requerido'
-      else if (nombre.length < 3) mensaje = 'Debe tener al menos 3 caracteres'
-      else if (nombre.length > 20) mensaje = 'Debe tener menos de 20 caracteres'
+      if (!v) mensaje = "Campo requerido";
+      else if (v.length < 3) mensaje = "Debe tener al menos 3 caracteres";
+      else if (v.length > 20) mensaje = "Debe tener menos de 20 caracteres";
 
-      return {
-        mensaje,
-        mostrar: mensaje !== '' && this.formDirty.nombre,
-        ok: mensaje === ''
-      }
+      return { mensaje, mostrar: mensaje && this.formDirty.nombre, ok: !mensaje };
     },
 
     // ------- EMAIL -------
     errorEmail() {
-      let mensaje = ''
-      let email = this.formData.email
-      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      let mensaje = "";
+      const v = this.formData.email;
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      if (!email) mensaje = 'Email requerido'
-      else if (!regex.test(email)) mensaje = 'Formato inválido'
+      if (!v) mensaje = "Email requerido";
+      else if (!regex.test(v)) mensaje = "Formato inválido";
 
-      return {
-        mensaje,
-        mostrar: mensaje !== '' && this.formDirty.email,
-        ok: mensaje === ''
-      }
+      return { mensaje, mostrar: mensaje && this.formDirty.email, ok: !mensaje };
     },
 
     // ------- PASSWORD -------
     errorPassword() {
-      let mensaje = ''
-      let pass = this.formData.password
+      let mensaje = "";
+      const v = this.formData.password;
 
-      if (!pass) mensaje = 'Contraseña requerida'
-      else if (pass.length < 6) mensaje = 'Debe tener al menos 6 caracteres'
+      if (!v) mensaje = "Contraseña requerida";
+      else if (v.length < 6) mensaje = "Debe tener al menos 6 caracteres";
 
-      return {
-        mensaje,
-        mostrar: mensaje !== '' && this.formDirty.password,
-        ok: mensaje === ''
-      }
+      return { mensaje, mostrar: mensaje && this.formDirty.password, ok: !mensaje };
     },
 
     // ------- CONFIRMAR -------
     errorConfirmar() {
-      let mensaje = ''
-      const pass = this.formData.password
-      const confirmar = this.formData.confirmar
+      let mensaje = "";
+      const pass = this.formData.password;
+      const conf = this.formData.confirmar;
 
-      if (!confirmar) mensaje = 'Debe confirmar la contraseña'
-      else if (confirmar !== pass) mensaje = 'Las contraseñas no coinciden'
+      if (!conf) mensaje = "Debe confirmar la contraseña";
+      else if (conf !== pass) mensaje = "Las contraseñas no coinciden";
 
-      return {
-        mensaje,
-        mostrar: mensaje !== '' && this.formDirty.confirmar,
-        ok: mensaje === ''
-      }
-    }
+      return { mensaje, mostrar: mensaje && this.formDirty.confirmar, ok: !mensaje };
+    },
   },
 
   methods: {
@@ -136,8 +147,8 @@ export default {
         nombre: null,
         email: null,
         password: null,
-        confirmar: null
-      }
+        confirmar: null,
+      };
     },
 
     estadoBotonDeshabilitado() {
@@ -146,26 +157,45 @@ export default {
         this.errorEmail.ok &&
         this.errorPassword.ok &&
         this.errorConfirmar.ok
-      )
+      );
     },
 
-    enviar() {
-      if (this.estadoBotonDeshabilitado()) {
-        this.mensaje = "Corrige los errores"
-        this.exito = false
-        return
-      }
+async enviar() {
+  if (this.estadoBotonDeshabilitado()) {
+    this.exito = false;
+    this.mensaje = "Corrige los errores";
+    return;
+  }
 
-      const datos = { ...this.formData }
-      console.log("Registrado:", datos)
+  try {
+    const datos = {
+      nombre: this.formData.nombre,
+      email: this.formData.email,
+      password: this.formData.password,
+      role: "user",
+    };
 
-      this.mensaje = `Cuenta creada para ${this.formData.nombre}`
-      this.exito = true
+    const resp = await AuthService.register(datos);
 
-      this.formData = this.getInicialData()
-      this.formDirty = this.getInicialData()
-    }
+    this.exito = true;
+    this.mensaje = `Cuenta creada para ${resp.usuario.nombre}`;
+
+    // Limpieza de formulario
+    this.formData = this.getInicialData();
+    this.formDirty = this.getInicialData();
+
+  } catch (error) {
+    // 🔥 ESTA ES LA PARTE CORRECTA PARA FETCH/AXIOS
+    const msg =
+      error?.response?.data?.error ||
+      error.message ||
+      "Error al registrar";
+
+    this.exito = false;
+    this.mensaje = msg;
   }
 }
 
+  },
+};
 </script>

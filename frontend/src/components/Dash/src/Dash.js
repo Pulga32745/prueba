@@ -49,11 +49,24 @@ export default {
       return { mensaje: m, mostrar: m && this.formDirty.precio, ok: !m };
     },
 
+    // 🔥 VALIDACIÓN DE STOCK
+    errorStock() {
+      let m = "";
+      const v = this.formData.stock;
+
+      if (v === null || v === "") m = "Campo requerido";
+      else if (v < 0) m = "Debe ser mayor o igual a 0";
+
+      return { mensaje: m, mostrar: m && this.formDirty.stock, ok: !m };
+    },
+
+    // 🔥 BOTÓN DESHABILITADO (incluye stock)
     botonDeshabilitado() {
       return (
         !this.errorNombre.ok ||
         !this.errorDescripcion.ok ||
-        !this.errorPrecio.ok
+        !this.errorPrecio.ok ||
+        !this.errorStock.ok
       );
     },
   },
@@ -65,7 +78,7 @@ export default {
         descripcion: null,
         precio: null,
         stock: null,
-        id: null
+        id: null,
       };
     },
 

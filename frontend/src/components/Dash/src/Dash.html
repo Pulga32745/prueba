@@ -1,96 +1,98 @@
- <div class="dashboard-container">
+<div class="dashboard-container">
 
-    <h1 class="dashboard-title">Panel de Gestión de Stock</h1>
+  <h1 class="dashboard-title">Panel de Gestión de Stock</h1>
 
-    <!-- Card del formulario -->
-    <div class="form-card">
+  <!-- Card del formulario -->
+  <div class="form-card">
 
-      <div class="form-row">
-        <label>Nombre del producto</label>
-        <input
-          type="text"
-          class="form-control"
-          v-model.trim="formData.nombre"
-          @input="formDirty.nombre = true"
-        />
-        <div v-if="errorNombre.mostrar" class="error-msg">
-          {{ errorNombre.mensaje }}
-        </div>
+    <div class="form-row">
+      <label>Nombre del producto</label>
+      <input
+        type="text"
+        class="form-control"
+        v-model.trim="formData.nombre"
+        @input="formDirty.nombre = true"
+      />
+      <div v-if="errorNombre.mostrar" class="error-msg">
+        {{ errorNombre.mensaje }}
       </div>
-
-      <div class="form-row">
-        <label>Descripción</label>
-        <textarea
-          class="form-control"
-          rows="3"
-          v-model.trim="formData.descripcion"
-          @input="formDirty.descripcion = true"
-        ></textarea>
-        <div v-if="errorDescripcion.mostrar" class="error-msg">
-          {{ errorDescripcion.mensaje }}
-        </div>
-      </div>
-
-      <div class="form-row">
-        <label>Precio</label>
-        <input
-          type="number"
-          class="form-control"
-          v-model.number="formData.precio"
-          @input="formDirty.precio = true"
-        />
-        <div v-if="errorPrecio.mostrar" class="error-msg">
-          {{ errorPrecio.mensaje }}
-        </div>
-      </div>
-
-<!--       <div class="form-row">
-        <label>Stock</label>
-        <input
-          type="number"
-          class="form-control"
-          v-model.number="formData.stock"
-          @input="formDirty.stock = true"
-        />
-        <div v-if="errorStock.mostrar" class="error-msg">
-          {{ errorStock.mensaje }}
-        </div>
-      </div> -->
-
-      <button
-        class="btn-submit"
-        :disabled="botonDeshabilitado"
-        @click="guardarProducto"
-      >
-        {{ modoEdicion ? "Guardar Cambios" : "Guardar Producto" }}
-      </button>
-
     </div>
 
-    <!-- Tabla -->
-    <h2 class="inventario-title">Inventario Actual</h2>
+    <div class="form-row">
+      <label>Descripción</label>
+      <textarea
+        class="form-control"
+        rows="3"
+        v-model.trim="formData.descripcion"
+        @input="formDirty.descripcion = true"
+      ></textarea>
+      <div v-if="errorDescripcion.mostrar" class="error-msg">
+        {{ errorDescripcion.mensaje }}
+      </div>
+    </div>
 
-    <table class="product-table">
-      <thead>
-        <tr>
-          <th>Producto</th>
-          <th>Precio</th>
-          <!-- <th>Stock</th> -->
-          <th>Acciones</th>
-        </tr>
-      </thead>
+    <div class="form-row">
+      <label>Precio</label>
+      <input
+        type="number"
+        class="form-control"
+        v-model.number="formData.precio"
+        @input="formDirty.precio = true"
+      />
+      <div v-if="errorPrecio.mostrar" class="error-msg">
+        {{ errorPrecio.mensaje }}
+      </div>
+    </div>
 
-      <tbody>
-        <tr v-for="producto in productos" :key="producto.id">
-          <td>{{ producto.nombre }}</td>
-          <td>${{ producto.precio }}</td>
-          <td>{{ producto.stock }}</td>
-          <td class="acciones">
-            <button class="btn-edit" @click="editarProducto(producto)">Editar</button>
-            <button class="btn-delete" @click="eliminarProducto(producto.id)">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- STOCK — AHORA ACTIVO Y FUNCIONAL -->
+    <div class="form-row">
+      <label>Stock</label>
+      <input
+        type="number"
+        class="form-control"
+        v-model.number="formData.stock"
+        @input="formDirty.stock = true"
+        min="0"
+      />
+      <div v-if="errorStock.mostrar" class="error-msg">
+        {{ errorStock.mensaje }}
+      </div>
+    </div>
+
+    <button
+      class="btn-submit"
+      :disabled="botonDeshabilitado"
+      @click="guardarProducto"
+    >
+      {{ modoEdicion ? "Guardar Cambios" : "Guardar Producto" }}
+    </button>
 
   </div>
+
+  <!-- Tabla -->
+  <h2 class="inventario-title">Inventario Actual</h2>
+
+  <table class="product-table">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr v-for="producto in productos" :key="producto.id">
+        <td>{{ producto.nombre }}</td>
+        <td>${{ producto.precio }}</td>
+        <td>{{ producto.stock }}</td>
+        <td class="acciones">
+          <button class="btn-edit" @click="editarProducto(producto)">Editar</button>
+          <button class="btn-delete" @click="eliminarProducto(producto.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
