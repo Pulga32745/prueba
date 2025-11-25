@@ -111,31 +111,22 @@ onMounted(async () => {
       return
     }
 
-    // 1. Ordenar por stock ascendente (menos stock primero)
-    const ordenadosPorStock = [...data].sort((a, b) => a.stock - b.stock)
-
-    // 2. Tomar solo 4 productos para destacados
-    const top4 = ordenadosPorStock.slice(0, 4)
-
-    // 3. Aplicar descuento a los 3 con menor stock
-    const productosFinales = top4.map((p, index) => {
-      const tieneDescuento = index < 3
-      const descuento = tieneDescuento ? 20 : 0
-
-      const precioFinal = tieneDescuento
-        ? p.precio - p.precio * (descuento / 100)
-        : p.precio
-
-      return {
-        ...p,
-        img: p.img_url,           
-        precioOriginal: p.precio, 
-        precioFinal: precioFinal,
-        descuento: descuento,
-      }
+    // Ordenar por fecha de creación (más nuevos primero)
+    const ordenadosPorFecha = [...data].sort((a, b) => {
+      return new Date(b.created_add) - new Date(a.created_add)
     })
 
-    productos.value = productosFinales
+    // Tomar los 4 productos más nuevos
+    const top4 = ordenadosPorFecha.slice(0, 4)
+
+
+    productos.value = top4.map(p => ({
+      ...p,
+      img: p.img_url,
+      precioOriginal: null,
+      precioFinal: p.precio,
+      descuento: 0
+    }))
 
   } catch (e) {
     console.error("Error cargando productos:", e)
@@ -146,6 +137,7 @@ function agregarAlCarrito(producto) {
   alert(`"${producto.nombre}" agregado al carrito 🛒`)
 }
 </script>
+
 
 
 <style scoped>
