@@ -5,7 +5,7 @@
 
       <div class="row g-4">
         <div class="col-md-4" v-for="item in productos" :key="item.id">
-          <ProductCard :producto="item" @add-to-cart="agregarAlCarrito" /> <!--Local Storage / Integrar con backend-->
+          <ProductCard :producto="item" @add-to-cart="agregarAlCarrito" />
         </div>
       </div>
     </div>
@@ -13,16 +13,31 @@
 </template>
 
 <script setup>
-import ProductCard from './ProductCard.vue'
-// INTEGRAR BACKEND
-const productos = [
-  { id: 1, nombre: 'Remera Verde', precio: 9500, img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg' },
-  { id: 2, nombre: 'Jean Natural', precio: 12000, img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg' },
-  { id: 3, nombre: 'Campera Eco', precio: 17500, img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg' }
-]
+import { ref, onMounted } from 'vue';
+import ProductCard from './ProductCard.vue';
+
+const productos = ref([]);
+
+onMounted(async () => {
+  try {
+    const res = await fetch('http://localhost:3000/api/v1/products', {
+});
+
+    const data = await res.json();
+
+    console.log("📦 PRODUCTOS DESDE BACKEND:", JSON.stringify(data, null, 2));
+    
+    productos.value = data;
+
+  } catch (e) {
+    console.error("Error obteniendo productos:", e);
+  }
+});
+
+
 
 function agregarAlCarrito(producto) {
-  alert(`"${producto.nombre}" agregado al carrito ✅`)
+  alert(`"${producto.nombre}" agregado al carrito`);
 }
 </script>
 
@@ -33,4 +48,5 @@ function agregarAlCarrito(producto) {
   background-color: #f6f8f7;
 }
 </style>
+
 
