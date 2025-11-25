@@ -97,49 +97,56 @@
 </template>
 
 <script setup>
-const productos = [
-  {
-    id: 1,
-    nombre: 'Remera Oversize Premium',
-    categoria: 'REMERAS',
-    precioOriginal: 29.99,
-    precioFinal: 23.99,
-    descuento: 20,
-    img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg',
-  },
-  {
-    id: 2,
-    nombre: 'Jean Skinny Fit',
-    categoria: 'PANTALONES',
-    precioOriginal: 49.99,
-    precioFinal: 49.99,
-    descuento: 0,
-    img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg',
-  },
-  {
-    id: 3,
-    nombre: 'Campera de Cuero',
-    categoria: 'CAMPERAS',
-    precioOriginal: 129.99,
-    precioFinal: 110.49,
-    descuento: 15,
-    img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg',
-  },
-  {
-    id: 4,
-    nombre: 'Zapatillas Urbanas',
-    categoria: 'CALZADO',
-    precioOriginal: 79.99,
-    precioFinal: 55.99,
-    descuento: 30,
-    img: 'https://st2.depositphotos.com/39040180/43269/i/450/depositphotos_432698990-stock-photo-blank-shirt-color-black-template.jpg',
-  },
-]
+import { ref, onMounted } from 'vue'
+
+const productos = ref([])
+
+onMounted(async () => {
+  try {
+    const resp = await fetch("http://localhost:3000/api/v1/products")
+    const data = await resp.json()
+
+    if (!Array.isArray(data)) {
+      console.error("La API no devolvió un array:", data)
+      return
+    }
+
+    // 1. Ordenar por stock ascendente (menos stock primero)
+    const ordenadosPorStock = [...data].sort((a, b) => a.stock - b.stock)
+
+    // 2. Tomar solo 4 productos para destacados
+    const top4 = ordenadosPorStock.slice(0, 4)
+
+    // 3. Aplicar descuento a los 3 con menor stock
+    const productosFinales = top4.map((p, index) => {
+      const tieneDescuento = index < 3
+      const descuento = tieneDescuento ? 20 : 0
+
+      const precioFinal = tieneDescuento
+        ? p.precio - p.precio * (descuento / 100)
+        : p.precio
+
+      return {
+        ...p,
+        img: p.img_url,           
+        precioOriginal: p.precio, 
+        precioFinal: precioFinal,
+        descuento: descuento,
+      }
+    })
+
+    productos.value = productosFinales
+
+  } catch (e) {
+    console.error("Error cargando productos:", e)
+  }
+})
 
 function agregarAlCarrito(producto) {
-  alert(`"${producto.nombre}" agregado al carrito ✅`)
+  alert(`"${producto.nombre}" agregado al carrito 🛒`)
 }
 </script>
+
 
 <style scoped>
 .home {

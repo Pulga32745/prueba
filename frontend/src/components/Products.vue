@@ -37,7 +37,7 @@ onMounted(async () => {
 
 
 function agregarAlCarrito(producto) {
-  alert(`"${producto.nombre}" agregado al carrito`);
+  alert(`"${producto.nombre}" agregado al carrito 🛒`);
 }
 </script>
 
