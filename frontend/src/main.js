@@ -1,6 +1,6 @@
 import './assets/main.css'
 import './assets/base.css'
-
+import { createPinia } from 'pinia'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
@@ -23,6 +23,7 @@ axios.interceptors.request.use((config) => {
 
 const app = createApp(App)
 //console.log(app)
+app.use(createPinia())
 app.use(router)
 app.mount('#app')
 

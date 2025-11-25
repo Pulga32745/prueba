@@ -51,8 +51,13 @@ onMounted(async () => {
   }
 });
 
+import { useCartStore } from '@/stores/cart'
+
+const cart = useCartStore()
+
 function agregarAlCarrito(producto) {
-  alert(`"${producto.nombre}" agregado al carrito 🛒`);
+  cart.addToCart(producto)
+  alert(`"${producto.nombre}" agregado al carrito 🛒`)
 }
 </script>
 

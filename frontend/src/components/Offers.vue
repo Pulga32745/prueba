@@ -80,7 +80,12 @@ onMounted(async () => {
   }
 })
 
+import { useCartStore } from '@/stores/cart'
+
+const cart = useCartStore()
+
 function agregarAlCarrito(producto) {
+  cart.addToCart(producto)
   alert(`"${producto.nombre}" agregado al carrito 🛒`)
 }
 </script>

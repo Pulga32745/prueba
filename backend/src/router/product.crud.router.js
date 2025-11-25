@@ -1,12 +1,29 @@
-import { Router } from 'express';
-import { ProductController } from '../controllers/Product.js';
-import { authenticateToken } from '../middleware/authentication.js';
+import { Router } from "express";
+import { authenticateToken } from "../middleware/authentication.js";
+import role from "../middleware/role.js";
+import { ProductController } from "../controllers/Product.js";
 
-const ProductRouter = Router();
+const ProductCrudRouter = Router();
 
-ProductRouter.get('/select/:id', ProductController.getById)
-  .delete('/delete/:id', authenticateToken, ProductController.deleteById)
-  .post('/create', authenticateToken, ProductController.createByJson)
-  .patch('/update', authenticateToken, ProductController.updateByJson);
+ProductCrudRouter.post(
+  "/create",
+  authenticateToken,
+  role("admin"),
+  ProductController.createByJson
+);
 
-export default ProductRouter;
+ProductCrudRouter.put(
+  "/update/:id",
+  authenticateToken,
+  role("admin"),
+  ProductController.updateByJson
+);
+
+ProductCrudRouter.delete(
+  "/delete/:id",
+  authenticateToken,
+  role("admin"),
+  ProductController.deleteById
+);
+
+export default ProductCrudRouter;

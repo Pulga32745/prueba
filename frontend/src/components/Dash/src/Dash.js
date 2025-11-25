@@ -1,4 +1,5 @@
 import ProductosService from "@/services/productosService";
+import { getProductStats, getPriceAnalytics } from "@/services/productStats";
 
 export default {
   name: "Dashboard",
@@ -10,11 +11,36 @@ export default {
 
       formData: this.getInicialData(),
       formDirty: this.getInicialData(),
+
+      stats: {
+        totalProductos: "--",
+        precioPromedio: "--",
+        precioMin: "--",
+        precioMax: "--",
+      },
+
+      analytics: {
+        baratos: "--",
+        medios: "--",
+        caros: "--",
+      },
+
+      // Saludo
+      userName: localStorage.getItem("userName"),
+      userRole: localStorage.getItem("role"),
     };
   },
 
   async mounted() {
     this.productos = await ProductosService.getAll();
+
+    const token = localStorage.getItem("token");
+
+    const stats = await getProductStats(token);
+    this.stats = stats;
+
+    const analytics = await getPriceAnalytics(token);
+    this.analytics = analytics;
   },
 
   computed: {
@@ -49,7 +75,6 @@ export default {
       return { mensaje: m, mostrar: m && this.formDirty.precio, ok: !m };
     },
 
-    // 🔥 VALIDACIÓN DE STOCK
     errorStock() {
       let m = "";
       const v = this.formData.stock;
@@ -61,25 +86,21 @@ export default {
     },
 
     errorImgUrl() {
-  let m = "";
-  const v = this.formData.img_url;
+      let m = "";
+      const v = this.formData.img_url;
 
-  if (!v) m = "Campo requerido";
+      if (!v) m = "Campo requerido";
+      else {
+        try {
+          new URL(v);
+        } catch (e) {
+          m = "Debe ser una URL válida";
+        }
+      }
 
-  // acepta cualquier URL válida, incluso si no termina en .jpg
-  else {
-    try {
-      new URL(v);
-    } catch (err) {
-      m = "Debe ser una URL válida";
-    }
-  }
+      return { mensaje: m, mostrar: m && this.formDirty.img_url, ok: !m };
+    },
 
-  return { mensaje: m, mostrar: m && this.formDirty.img_url, ok: !m };
-},
-
-
-    // 🔥 BOTÓN DESHABILITADO (incluye stock)
     botonDeshabilitado() {
       return (
         !this.errorNombre.ok ||
@@ -99,7 +120,7 @@ export default {
         precio: null,
         stock: null,
         id: null,
-        img_url: null
+        img_url: null,
       };
     },
 

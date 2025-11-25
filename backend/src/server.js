@@ -10,6 +10,12 @@ import notFoundHandler from './middleware/notFoundHandler.js';
 import { apiReference } from '@scalar/express-api-reference';
 import path from 'path';
 import AuthRouter from './router/auth.router.js';
+import ProductStatsRouter from "./router/product.stats.router.js"; // Crud mas complejo
+import ProductAnalyticsRouter from "./router/product.analytics.router.js"; // Crud mas complejo
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+
+
 
 const server = express();
 
@@ -41,8 +47,22 @@ server.use('/api/v1/product', ProductRouter);
 server.use('/api/v1/users', UserAllRouter);
 server.use('/api/v1/user', UserRouter);
 server.use('/api/v1/auth', AuthRouter);
+server.use('/api/v1/products', ProductStatsRouter);
+server.use('/api/v1/products', ProductAnalyticsRouter);
 
 // Manejo 404
 server.use(notFoundHandler);
+
+// Rate Limit
+server.use(helmet());
+
+const limiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 100,
+});
+
+server.use(limiter);
+
+
 
 export default server;

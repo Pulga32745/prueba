@@ -178,3 +178,91 @@ textarea.form-control {
   display: flex;
   gap: 12px;
 }
+
+
+/* CONTENEDOR GENERAL */
+.stats-section {
+  text-align: center;
+  margin: 40px auto;
+  max-width: 1100px;
+}
+
+/* TÍTULOS */
+.stats-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stats-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  color: #222;
+}
+
+.stats-icon {
+  font-size: 32px;
+}
+
+/* GRID */
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+/* TARJETAS */
+.stat-box {
+  background: white;
+  border-radius: 14px;
+  padding: 20px 24px;
+  width: 240px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: 0.25s ease;
+}
+
+.stat-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.stat-box h4 {
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.stat-value {
+  margin-top: 6px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #111;
+}
+
+/* CÍRCULOS DE ICONOS */
+.stat-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26px;
+  margin: 0 auto;
+  color: white;
+}
+
+/* COLORES LINDOS */
+.green { background: #28a745; }
+.green-light { background: #5cd65c; }
+.blue { background: #007bff; }
+.orange { background: #fd7e14; }
+.purple { background: #6f42c1; }
+.yellow { background: #f0ad4e; }
+.red { background: #dc3545; }
+
