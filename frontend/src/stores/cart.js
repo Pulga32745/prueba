@@ -27,10 +27,16 @@ export const useCartStore = defineStore('cart', {
       }
 
       // si no existe → agregarlo con cantidad 1
-      this.items.push({
-        ...producto,
-        cantidad: 1
-      })
+     this.items.push({
+  id: producto.id,
+  nombre: producto.nombre,
+  precio: producto.precio,              // 👈 PRECIO CON DESCUENTO YA CALCULADO
+  precioOriginal: producto.precioOriginal,  
+  tieneDescuento: producto.tieneDescuento,
+  stock: producto.stock,                // 👈 NECESARIO PARA validar stock
+  cantidad: 1
+})
+
     },
 
     remove(index) {

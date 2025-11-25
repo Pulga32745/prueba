@@ -85,9 +85,13 @@ import { useCartStore } from '@/stores/cart'
 const cart = useCartStore()
 
 function agregarAlCarrito(producto) {
-  cart.addToCart(producto)
+  cart.addToCart({
+    ...producto,
+    precio: Number(producto.precioFinal),   // 👈 usar precio con descuento
+  })
   alert(`"${producto.nombre}" agregado al carrito 🛒`)
 }
+
 </script>
 
 
