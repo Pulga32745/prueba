@@ -27,7 +27,7 @@
                 class="btn btn-success mt-3"
                 @click="agregarAlCarrito(p)"
               >
-                Comprar
+                Agregar al carrito
               </button>
 
             </div>
