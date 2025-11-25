@@ -1,10 +1,21 @@
 <template>
   <section class="home">
+
+    <!-- 👋 BIENVENIDO USUARIO -->
+    <div v-if="userName" class="text-center mt-4">
+      <h2 class="fw-bold">
+        👋 Bienvenido <span class="text-success">{{ userName }}</span>
+      </h2>
+    </div>
+
     <div class="hero text-center">
-      <h1 class="fw-bold mt-3">Descubre tu estilo con <span class="text-success">TiendaVirtual</span></h1>
+      <h1 class="fw-bold mt-3">
+        Descubre tu estilo con <span class="text-success">TiendaVirtual</span>
+      </h1>
       <p class="text-muted mb-4">
         Las últimas tendencias en moda con descuentos de hasta 30% en productos seleccionados
       </p>
+
       <div class="d-flex justify-content-center gap-3">
         <RouterLink to="/products" class="btn btn-success text-white">Ver Catálogo</RouterLink>
         <RouterLink to="/offers" class="btn btn-outline-success">Ver Ofertas</RouterLink>
@@ -19,12 +30,14 @@
             <p class="text-muted mb-0">En compras mayores a $50</p>
           </div>
         </div>
+
         <div class="col-md-4">
           <div class="p-3 bg-white shadow-sm rounded-3">
             <h5>🔒 Compra Segura</h5>
             <p class="text-muted mb-0">Pagos 100% protegidos</p>
           </div>
         </div>
+
         <div class="col-md-4">
           <div class="p-3 bg-white shadow-sm rounded-3">
             <h5>🌿 Calidad Premium</h5>
@@ -33,6 +46,7 @@
         </div>
       </div>
     </div>
+
     <hr>
 
     <div class="productos-destacados py-5">
@@ -49,25 +63,26 @@
             class="col-md-3 d-flex align-items-stretch"
           >
             <div class="card border-0 shadow-sm h-100 position-relative">
+
               <div class="position-relative">
-                <img
-                  :src="producto.img"
-                  class="card-img-top rounded-top"
-                  :alt="producto.nombre"
-                />
-                <div
-                  v-if="producto.descuento"
-                  class="badge-descuento position-absolute top-0 end-0 m-2"
-                >
+                <img :src="producto.img" class="card-img-top rounded-top" :alt="producto.nombre" />
+
+                <div v-if="producto.descuento" class="badge-descuento position-absolute top-0 end-0 m-2">
                   -{{ producto.descuento }}%
                 </div>
               </div>
+
               <div class="card-body d-flex flex-column justify-content-between text-start">
                 <div>
                   <small class="text-uppercase text-muted">{{ producto.categoria }}</small>
+
                   <h5 class="fw-semibold mb-2">{{ producto.nombre }}</h5>
+
                   <div class="precios d-flex align-items-baseline gap-2">
-                    <h5 class="fw-bold text-success mb-0">${{ producto.precioFinal.toFixed(2) }}</h5>
+                    <h5 class="fw-bold text-success mb-0">
+                      ${{ producto.precioFinal.toFixed(2) }}
+                    </h5>
+
                     <span
                       v-if="producto.precioOriginal"
                       class="text-muted text-decoration-line-through"
@@ -76,11 +91,13 @@
                     </span>
                   </div>
                 </div>
+
                 <div class="text-end mt-3">
                   <button class="btn btn-success" @click="agregarAlCarrito(producto)">
                     ¡Comprar!
                   </button>
                 </div>
+
               </div>
             </div>
           </div>
@@ -91,34 +108,34 @@
             Ver Todos los Productos →
           </RouterLink>
         </div>
+
       </div>
     </div>
+
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from "vue";
 
-const productos = ref([])
+const productos = ref([]);
+const userName = ref(localStorage.getItem("userName")); // ✅ Ahora funciona
 
 onMounted(async () => {
   try {
-    const resp = await fetch("http://localhost:3000/api/v1/products")
-    const data = await resp.json()
+    const resp = await fetch("http://localhost:3000/api/v1/products");
+    const data = await resp.json();
 
     if (!Array.isArray(data)) {
-      console.error("La API no devolvió un array:", data)
-      return
+      console.error("La API no devolvió un array:", data);
+      return;
     }
 
-    // Ordenar por fecha de creación (más nuevos primero)
     const ordenadosPorFecha = [...data].sort((a, b) => {
-      return new Date(b.created_add) - new Date(a.created_add)
-    })
+      return new Date(b.created_add) - new Date(a.created_add);
+    });
 
-    // Tomar los 4 productos más nuevos
-    const top4 = ordenadosPorFecha.slice(0, 4)
-
+    const top4 = ordenadosPorFecha.slice(0, 4);
 
     productos.value = top4.map(p => ({
       ...p,
@@ -126,19 +143,16 @@ onMounted(async () => {
       precioOriginal: null,
       precioFinal: p.precio,
       descuento: 0
-    }))
-
+    }));
   } catch (e) {
-    console.error("Error cargando productos:", e)
+    console.error("Error cargando productos:", e);
   }
-})
+});
 
 function agregarAlCarrito(producto) {
-  alert(`"${producto.nombre}" agregado al carrito 🛒`)
+  alert(`"${producto.nombre}" agregado al carrito 🛒`);
 }
 </script>
-
-
 
 <style scoped>
 .home {
@@ -156,33 +170,17 @@ function agregarAlCarrito(producto) {
   padding: 0.3rem 0.7rem;
 }
 
-hr{
+hr {
   width: 80%;
   margin-left: auto;
   margin-right: auto;
-}
-
-.btn-circle {
-  border-radius: 50%;
-  width: 38px;
-  height: 38px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  color: #4caf50;
-  border: 1px solid #4caf50;
-  transition: all 0.3s ease;
-}
-.btn-circle:hover {
-  background-color: #4caf50;
-  color: white;
 }
 
 .card {
   border-radius: 12px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .card:hover {
   transform: translateY(-6px);
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
