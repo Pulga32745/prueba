@@ -33,3 +33,4 @@ function agregarAlCarrito(producto) {
   background-color: #f6f8f7;
 }
 </style>
+

@@ -60,13 +60,33 @@ export default {
       return { mensaje: m, mostrar: m && this.formDirty.stock, ok: !m };
     },
 
+    errorImgUrl() {
+  let m = "";
+  const v = this.formData.img_url;
+
+  if (!v) m = "Campo requerido";
+
+  // acepta cualquier URL válida, incluso si no termina en .jpg
+  else {
+    try {
+      new URL(v);
+    } catch (err) {
+      m = "Debe ser una URL válida";
+    }
+  }
+
+  return { mensaje: m, mostrar: m && this.formDirty.img_url, ok: !m };
+},
+
+
     // 🔥 BOTÓN DESHABILITADO (incluye stock)
     botonDeshabilitado() {
       return (
         !this.errorNombre.ok ||
         !this.errorDescripcion.ok ||
         !this.errorPrecio.ok ||
-        !this.errorStock.ok
+        !this.errorStock.ok ||
+        !this.errorImgUrl.ok
       );
     },
   },
@@ -79,6 +99,7 @@ export default {
         precio: null,
         stock: null,
         id: null,
+        img_url: null
       };
     },
 

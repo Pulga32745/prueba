@@ -59,6 +59,19 @@
       </div>
     </div>
 
+    <div class="form-row">
+      <label class="form-label">URL de imagen del producto </label>
+  <input
+    type="text"
+    class="form-control"
+    v-model="formData.img_url"
+    @input="formDirty.img_url = true"
+  />
+  <div v-if="errorImgUrl.mostrar" class="text-danger small">
+    {{ errorImgUrl.mensaje }}
+  </div>
+    </div>
+
     <button
       class="btn-submit"
       :disabled="botonDeshabilitado"
