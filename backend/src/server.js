@@ -10,7 +10,6 @@ import notFoundHandler from './middleware/notFoundHandler.js';
 import { apiReference } from '@scalar/express-api-reference';
 import path from 'path';
 import AuthRouter from './router/auth.router.js';
- 
 
 const server = express();
 
@@ -18,37 +17,32 @@ const server = express();
 server.use(morgan('dev'));
 server.use(express.json());
 
-
-server.use(cors({
-  origin: "http://localhost:5173",
-  methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS",
-  allowedHeaders: "Content-Type, Authorization",
-  credentials: true
-}));
-
-
+server.use(
+  cors({
+    origin: 'http://localhost:5173',
+    methods: 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization',
+    credentials: true,
+  }),
+);
 
 server.use('/openapi.yml', express.static(path.join(process.cwd(), 'docs', 'openapi.yml')));
-server.use('/docs',
+server.use(
+  '/docs',
   apiReference({
     theme: 'purple',
     url: '/openapi.yml',
   }),
 );
 
-
-
 // Rutas
 server.use('/api/v1/products', ProductAllRouter);
 server.use('/api/v1/product', ProductRouter);
 server.use('/api/v1/users', UserAllRouter);
 server.use('/api/v1/user', UserRouter);
-server.use('/api/v1/auth', AuthRouter); 
-
+server.use('/api/v1/auth', AuthRouter);
 
 // Manejo 404
 server.use(notFoundHandler);
-
- 
 
 export default server;

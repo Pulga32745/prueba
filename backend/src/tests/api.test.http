@@ -24,7 +24,7 @@ Content-Type: {{contentType}}
 }
 
 
-### Login and capture token
+###
 
 # @name login
 POST {{host}}/api/user/login
@@ -35,8 +35,7 @@ Content-Type: {{contentType}}
   "password": {{userpwd}}
 }
 
-
-### 🪪  Extract token from previous response
+###
 @token = {{login.response.body.token}}
 
 ### 👤 3. Use token in protected request

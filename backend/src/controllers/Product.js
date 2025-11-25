@@ -1,7 +1,6 @@
-import { RepositoryFactory } from "../repositories/RepositoryFactory.js";
+import { RepositoryFactory } from '../repositories/RepositoryFactory.js';
 
 export class ProductController {
-
   static async getAllProducts(req, res) {
     try {
       const repo = RepositoryFactory.getRepository();
@@ -36,7 +35,7 @@ export class ProductController {
     try {
       const repo = RepositoryFactory.getRepository();
       await repo.delete(req.params.id);
-      res.json({ message: "Producto eliminado" });
+      res.json({ message: 'Producto eliminado' });
     } catch (e) {
       res.status(400).json({ error: e.message });
     }

@@ -1,10 +1,9 @@
-import { UserModelSupabase } from "../models/User.Supabase.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { config } from "../config/config.js";
+import { UserModelSupabase } from '../models/User.Supabase.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { config } from '../config/config.js';
 
 class UserController {
-
   // ----------------------------------------
   // 🔥 REGISTRO DE USUARIO
   // ----------------------------------------
@@ -13,13 +12,13 @@ class UserController {
       const { nombre, email, password, role } = req.body;
 
       if (!nombre || !email || !password) {
-        return res.status(400).json({ error: "Todos los campos son obligatorios" });
+        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
       }
 
       // ¿Existe usuario?
       const existe = await UserModelSupabase.getByEmail(email);
       if (existe) {
-        return res.status(400).json({ error: "El email ya está registrado" });
+        return res.status(400).json({ error: 'El email ya está registrado' });
       }
 
       // Hash password
@@ -30,24 +29,22 @@ class UserController {
         nombre,
         email,
         password: hashed,
-        role: role || "user"
+        role: role || 'user',
       });
 
       return res.status(201).json({
-        mensaje: "Usuario registrado con éxito",
+        mensaje: 'Usuario registrado con éxito',
         usuario: {
           id: nuevoUsuario.id,
           nombre: nuevoUsuario.nombre,
           email: nuevoUsuario.email,
-          role: nuevoUsuario.role
-        }
+          role: nuevoUsuario.role,
+        },
       });
-
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   }
-
 
   // ----------------------------------------
   // 🔥 LOGIN
@@ -57,48 +54,42 @@ class UserController {
       const { email, password } = req.body;
 
       if (!email || !password)
-        return res.status(400).json({ error: "Email y contraseña requeridos" });
+        return res.status(400).json({ error: 'Email y contraseña requeridos' });
 
       const user = await UserModelSupabase.getByEmail(email);
       if (!user) {
-        return res.status(401).json({ error: "Credenciales inválidas" });
+        return res.status(401).json({ error: 'Credenciales inválidas' });
       }
 
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
-        return res.status(401).json({ error: "Credenciales inválidas" });
+        return res.status(401).json({ error: 'Credenciales inválidas' });
       }
 
       // Tokens
-      const accessToken = jwt.sign(
-        { id: user.id, role: user.role },
-        config.JWT_SECRET,
-        { expiresIn: "15m" }
-      );
+      const accessToken = jwt.sign({ id: user.id, role: user.role }, config.JWT_SECRET, {
+        expiresIn: '15m',
+      });
 
-      const refreshToken = jwt.sign(
-        { id: user.id },
-        config.JWT_REFRESH_SECRET,
-        { expiresIn: "7d" }
-      );
+      const refreshToken = jwt.sign({ id: user.id }, config.JWT_REFRESH_SECRET, {
+        expiresIn: '7d',
+      });
 
       return res.json({
-        mensaje: "Inicio de sesión correcto",
+        mensaje: 'Inicio de sesión correcto',
         user: {
           id: user.id,
           nombre: user.nombre,
           email: user.email,
-          role: user.role
+          role: user.role,
         },
         accessToken,
-        refreshToken
+        refreshToken,
       });
-
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   }
-
 
   // ----------------------------------------
   // 🔒 PERFIL DEL USUARIO AUTENTICADO
@@ -115,12 +106,10 @@ class UserController {
         email: user.email,
         role: user.role,
       });
-
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   }
-
 }
 
 export default UserController;

@@ -6,10 +6,7 @@ let supabase = null;
 class SupaBaseConnection {
   static getConnection() {
     if (!supabase) {
-      supabase = createClient(
-        config.SUPABASE_URL,
-        config.SUPABASE_API_KEY
-      );
+      supabase = createClient(config.SUPABASE_URL, config.SUPABASE_API_KEY);
       console.log('Supabase connected');
     }
     return supabase;

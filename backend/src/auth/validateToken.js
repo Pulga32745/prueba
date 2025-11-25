@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
-import { config } from "../config/config.js";
+import jwt from 'jsonwebtoken';
+import { config } from '../config/config.js';
 
 export default function validateToken(token) {
   return new Promise((resolve) => {

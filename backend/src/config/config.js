@@ -9,7 +9,7 @@ const {
   SERVER_PORT,
   SERVER_HOST,
   JWT_SECRET,
-  JWT_REFRESH_SECRET
+  JWT_REFRESH_SECRET,
 } = process.env;
 
 export const config = {
@@ -19,5 +19,5 @@ export const config = {
   SERVER_PORT,
   SERVER_HOST,
   JWT_SECRET,
-  JWT_REFRESH_SECRET
+  JWT_REFRESH_SECRET,
 };

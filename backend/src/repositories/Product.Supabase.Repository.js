@@ -1,17 +1,15 @@
-import SupabaseConnection from "../databases/supabase.cnx.js";
-import ProductModelSupabase from "../models/Product.Supabase.js";
+import SupabaseConnection from '../databases/supabase.cnx.js';
+import ProductModelSupabase from '../models/Product.Supabase.js';
 
 export default class ProductRepositorySupabase {
   constructor() {
     this.supabase = SupabaseConnection.getConnection();
-    this.table = "products";
+    this.table = 'products';
   }
 
   // Obtener todos
   async getAll() {
-    const { data, error } = await this.supabase
-      .from(this.table)
-      .select("*");
+    const { data, error } = await this.supabase.from(this.table).select('*');
 
     if (error) throw error;
     return data;
@@ -24,13 +22,11 @@ export default class ProductRepositorySupabase {
       producto.nombre,
       producto.precio,
       producto.descripcion,
-      producto.stock
+      producto.stock,
+      producto.img_url,
     );
 
-    const { data, error } = await this.supabase
-      .from(this.table)
-      .insert([nuevo])
-      .select();
+    const { data, error } = await this.supabase.from(this.table).insert([nuevo]).select();
 
     if (error) throw error;
     return data[0];
@@ -44,9 +40,10 @@ export default class ProductRepositorySupabase {
         nombre: producto.nombre,
         precio: producto.precio,
         descripcion: producto.descripcion,
-        stock: producto.stock
+        stock: producto.stock,
+        img_url: producto.img_url,
       })
-      .eq("id", producto.id)
+      .eq('id', producto.id)
       .select();
 
     if (error) throw error;
@@ -55,10 +52,7 @@ export default class ProductRepositorySupabase {
 
   // Borrar
   async delete(id) {
-    const { data, error } = await this.supabase
-      .from(this.table)
-      .delete()
-      .eq("id", id);
+    const { data, error } = await this.supabase.from(this.table).delete().eq('id', id);
 
     if (error) throw error;
     return data;
@@ -66,11 +60,7 @@ export default class ProductRepositorySupabase {
 
   // Buscar por ID
   async getById(id) {
-    const { data, error } = await this.supabase
-      .from(this.table)
-      .select("*")
-      .eq("id", id)
-      .single();
+    const { data, error } = await this.supabase.from(this.table).select('*').eq('id', id).single();
 
     if (error) throw error;
     return data;
