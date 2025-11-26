@@ -5,7 +5,7 @@ import validateToken from '../auth/validateToken.js';
 const UserRouter = Router();
 
 // 📌 GET /api/v1/user/:id  → Obtener 1 usuario
-UserRouter.get('/:id', validateToken, UserController.getById);
+UserRouter.get('/:id', validateToken, UserController.getbyId);
 
 // 📌 POST /api/v1/user  → Crear usuario
 UserRouter.post('/', UserController.create);
