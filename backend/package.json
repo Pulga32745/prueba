@@ -1,40 +1,19 @@
 {
   "name": "tp2-proyecto-final",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "type": "module",
-  "license": "AGPL-version-3.0",
-  "private": false,
-  "engines": {
-    "node": ">= 14.0.0",
-    "npm": ">= 6.0.0"
-  },
-  "homepage": "",
-  "repository": {
-    "type": "git",
-    "url": ""
-  },
-  "bugs": "",
-  "keywords": [],
-  "author": {
-    "name": "",
-    "email": "",
-    "url": ""
-  },
-  "contributors": [],
   "scripts": {
-    "dev": "node --watch index.js",
     "start": "node index.js",
-    "linter:check": "npx @biomejs/biome lint ./src  index.js",
-    "linter:format": "npx @biomejs/biome format --write ./src  index.js",
+    "dev": "node --watch index.js",
+    "linter:check": "npx @biomejs/biome lint ./src index.js",
+    "linter:format": "npx @biomejs/biome format --write ./src index.js",
     "test": "node --test"
   },
   "dependencies": {
     "@scalar/express-api-reference": "^0.8.24",
     "@supabase/supabase-js": "^2.81.1",
     "bcrypt": "^6.0.0",
-    "biome": "^0.3.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
@@ -47,3 +26,4 @@
     "@biomejs/biome": "2.2.4"
   }
 }
+
