@@ -10,8 +10,7 @@ info:
 servers:
   - url: https://estoy-cansado-jefe.onrender.com/api/v1
     description: Servidor de PRODUCCIÓN (Render)
-  - url: http://localhost:3000/api/v1
-    description: Servidor local de desarrollo
+  
 
 tags:
   - name: Autenticación
