@@ -9,16 +9,21 @@ const runServer = async () => {
       DatabaseFactory.getConnection();
     }
 
+    const port = process.env.PORT || config.SERVER_PORT;
+
     server.listen(
-      config.SERVER_PORT,
-      config.SERVER_HOST,
-      console.log(`
-                Server is running at: http://${config.SERVER_HOST}:${config.SERVER_PORT}
-            `),
+      port,
+      "0.0.0.0",
+      () => {
+        console.log(`
+          Server is running at: http://0.0.0.0:${port}
+        `);
+      }
     );
   } catch (error) {
     console.log(`Error en el server`, error.message);
   }
 };
+
 
 runServer();
