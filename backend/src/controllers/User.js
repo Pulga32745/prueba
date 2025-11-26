@@ -110,6 +110,93 @@ class UserController {
       return res.status(500).json({ error: error.message });
     }
   }
+
+  // ----------------------------------------
+// 🔹 ADMIN → Obtener todos los usuarios
+// ----------------------------------------
+static async getAll(req, res) {
+  try {
+    const users = await UserModelSupabase.getAll();
+    return res.json(users);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+// ----------------------------------------
+// 🔹 ADMIN → Obtener usuario por ID
+// ----------------------------------------
+static async getById(req, res) {
+  try {
+    const { id } = req.params;
+    const user = await UserModelSupabase.getById(id);
+    if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
+    return res.json(user);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+// ----------------------------------------
+// 🔹 ADMIN → Crear usuario manualmente
+// ----------------------------------------
+static async createByAdmin(req, res) {
+  try {
+    const { nombre, email, password, role } = req.body;
+
+    const existe = await UserModelSupabase.getByEmail(email);
+    if (existe) return res.status(400).json({ error: "El email ya existe" });
+
+    const hashed = await bcrypt.hash(password, 10);
+
+    const nuevo = await UserModelSupabase.create({
+      nombre,
+      email,
+      password: hashed,
+      role: role || "user",
+    });
+
+    return res.status(201).json(nuevo);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+// ----------------------------------------
+// 🔹 ADMIN → Actualizar usuario
+// ----------------------------------------
+static async updateByAdmin(req, res) {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+
+    if (data.password) {
+      data.password = await bcrypt.hash(data.password, 10);
+    }
+
+    const actualizado = await UserModelSupabase.update(id, data);
+
+    return res.json(actualizado);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+// ----------------------------------------
+// 🔹 ADMIN → Eliminar usuario
+// ----------------------------------------
+static async deleteByAdmin(req, res) {
+  try {
+    const { id } = req.params;
+
+    const eliminado = await UserModelSupabase.delete(id);
+
+    return res.json({ message: "Usuario eliminado", eliminado });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
 }
 
 export default UserController;
