@@ -1,6 +1,7 @@
 <script setup>
 import { useCartStore } from '@/stores/cart'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import axios from 'axios'
 
 const cart = useCartStore()
 const items = cart.items
@@ -14,6 +15,34 @@ function actualizarCantidad(item, event) {
 }
 
 const total = computed(() => cart.total)
+
+// 🟩 NUEVO: mensaje de respuesta
+const mensaje = ref("")
+
+// 🟩 NUEVO: función finalizar compra
+async function finalizarCompra() {
+  try {
+    const payload = {
+      items: cart.items.map(item => ({
+        producto_id: item.id,
+        nombre_producto: item.nombre,
+        cantidad: item.cantidad,
+        precio_unitario: item.precio,
+        precio_final: item.precio * item.cantidad
+      }))
+    }
+
+    await axios.post("http://localhost:3000/api/compras", payload)
+
+    mensaje.value = "Compra realizada con éxito 🎉"
+
+    cart.clear() // vacía el carrito
+
+  } catch (err) {
+    console.error(err)
+    mensaje.value = "Error al procesar la compra"
+  }
+}
 </script>
 
 <template>
@@ -64,7 +93,14 @@ const total = computed(() => cart.total)
         </div>
 
         <div class="text-end mt-3">
-          <button class="btn btn-success">Finalizar Compra</button>
+          <button class="btn btn-success" @click="finalizarCompra">
+            Finalizar Compra
+          </button>
+        </div>
+
+       
+        <div v-if="mensaje" class="alert alert-success mt-3">
+          {{ mensaje }}
         </div>
 
       </div>
@@ -75,5 +111,3 @@ const total = computed(() => cart.total)
     </div>
   </section>
 </template>
-
-

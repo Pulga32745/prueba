@@ -13,7 +13,7 @@
         Descubre tu estilo con <span class="text-success">TiendaVirtual</span>
       </h1>
       <p class="text-muted mb-4">
-        Las últimas tendencias en moda con descuentos de hasta 30% en productos seleccionados
+        Las últimas tendencias en moda con descuentos de hasta 20% en productos seleccionados
       </p>
 
       <div class="d-flex justify-content-center gap-3">
