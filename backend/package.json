@@ -25,6 +25,7 @@
   "contributors": [],
   "scripts": {
     "dev": "node --watch index.js",
+    "start": "node index.js",
     "linter:check": "npx @biomejs/biome lint ./src  index.js",
     "linter:format": "npx @biomejs/biome format --write ./src  index.js",
     "test": "node --test"
